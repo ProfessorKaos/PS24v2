@@ -82,7 +82,7 @@ class MPU():
         self.min_max_vals = {'AcX':(10,32000),'AcY':(10,32000), 'AcZ':(10,32000),'GyX':(10,32000),'GyY':(10,32000), 'GyZ':(10,32000)}
         self.sma = {'AcX':11,'AcY':11, 'AcZ':11,'GyX':11,'GyY':11, 'GyZ':11}
         self.N = 5 # Number of readings to be recorded in memory for the sma
-        self.freq = 20 # sets the asyncio sleep_ms frequency for movement
+        self.freq = 50 # sets the asyncio sleep_ms frequency for movement
         self.long_mem = {'AcX':[],'AcY':[], 'AcZ':[],'GyX':[],'GyY':[], 'GyZ':[]}
         self.long_len = 3000 // self.freq
         

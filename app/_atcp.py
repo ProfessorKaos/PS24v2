@@ -45,8 +45,7 @@ class ATCP():
             if self.data:
                 print("ATCP message: ", self.data.decode().strip())
                 try:
-                    print("executing: ", self.data.decode().strip())
-                    exec(self.data.decode().strip())
+                    exec(self.data)
                 except Exception as e:
                     print("Unable to execute ATCP message because: ", e)
                 self.data = b''

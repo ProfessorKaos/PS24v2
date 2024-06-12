@@ -18,14 +18,11 @@ def update():
     try:
         token='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'
         updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
-#         updater.install_update_if_available_after_boot(atcp.wifi_creds["User"], atcp.wifi_creds["Password"])
         hasUpdated = updater.install_update_if_available()
         if hasUpdated:
-            await atcp.send_message("Updated and restarting")
-            await led.pulse((0,0,255), 2, 3)
+            gc.collect()
             machine.reset()
         else:
-            await atcp.send_message("No new updates avaialable")
             del(updater)
             gc.collect()
     except Exception as e:
@@ -51,25 +48,23 @@ async def sound():
 async def touch():
     while True:
         if mpu.det_mov():
-#             udp.sock.sendto(message.encode(), ("192.168.178.47", 65000))
             await atcp.send_message("touched")
-#             print("message sent")
             await asyncio.sleep(1)
-        await asyncio.sleep_ms(50)
+        await asyncio.sleep_ms(mpu.freq)
 
 async def mpu_reading():
     while True:
 #         xyz = mpu.map_accel(0,100)
-        gyr = mpu.map_gyro(0,100)
+#         gyr = mpu.map_gyro(0,100)
 #         print(xyz)
-#         readings = mpu.sma_read_all()
-#         json = ujson.dumps(readings)
-#         await atcp.send_message("", json)
+        readings = mpu.sma_read_all()
+        json = ujson.dumps(readings)
+        await atcp.send_message(json)
         
-        await atcp.send_message(str(gyr))
+#         await atcp.send_message(str(gyr))
 #         await atcp.send_message("y", str(xyz[1]))
 #         await atcp.send_message("z", str(xyz[2]))
-        await asyncio.sleep_ms(50)
+        await asyncio.sleep_ms(mpu.freq)
 
 
 led = _led.LED()
@@ -92,7 +87,7 @@ async def main():
 #     loop.run_until_complete(waiting_to_connect())
     
     while True:
-        await asyncio.sleep(30)
+        await asyncio.sleep(20)
         gc.collect()
 #         print(mpu.sma)
 
