@@ -17,7 +17,12 @@ def update():
         token='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'
         updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
 #         updater.install_update_if_available_after_boot(atcp.wifi_creds["User"], atcp.wifi_creds["Password"])
-        updater.check_for_update_to_install_during_next_reboot()
+        hasUpdated = updater.install_update_if_available()
+        if hasUpdated:
+            machine.reset()
+        else:
+            del(updater)
+            gc.collect()
     except Exception as e:
         print("Something went wrong with updating: ", e)
 
