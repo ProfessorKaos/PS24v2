@@ -1,4 +1,4 @@
-from time import sleep_ms, ticks_ms
+from time import sleep_ms, ticks_ms, sleep
 import machine
 import uasyncio as asyncio
 import ujson
@@ -20,6 +20,8 @@ def update():
         updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
         hasUpdated = updater.install_update_if_available()
         if hasUpdated:
+            led.fill((0,0,255))
+            sleep(1)
             gc.collect()
             machine.reset()
         else:
@@ -59,7 +61,7 @@ async def mpu_reading():
 #         print(xyz)
         readings = mpu.sma_read_all()
         json = ujson.dumps(readings)
-        await atcp.send_message(json)
+#         await atcp.send_message(json)
         
 #         await atcp.send_message(str(gyr))
 #         await atcp.send_message("y", str(xyz[1]))
