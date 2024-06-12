@@ -16,6 +16,7 @@ def limit_map(x, in_min, in_max, out_min, out_max):
 def update():
     print("Initiating update")
     try:
+        led.fill((0,0,255))
         token='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'
         updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
         hasUpdated = updater.install_update_if_available()
@@ -23,8 +24,10 @@ def update():
             led.fill((0,0,255))
             sleep(1)
             gc.collect()
+            led.clear()
             machine.reset()
         else:
+            led.clear()
             del(updater)
             gc.collect()
     except Exception as e:
