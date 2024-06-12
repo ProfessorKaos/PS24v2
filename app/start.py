@@ -5,7 +5,7 @@ import app._atcp as _atcp
 import app._led as _led
 import app._mic as _mic
 import app._mpu as _mpu
-import app.secrets
+import secrets
 from app.ota_updater import OTAUpdater
 import gc
 

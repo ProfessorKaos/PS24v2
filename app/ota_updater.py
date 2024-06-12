@@ -123,7 +123,15 @@ class OTAUpdater:
 
     def get_latest_version(self):
         latest_release = self.http_client.get('https://api.github.com/repos/{}/releases/latest'.format(self.github_repo))
-        version = latest_release.json()['tag_name']
+        gh_json = latest_release.json()
+        try:
+            version = gh_json['tag_name']
+        except KeyError as e:
+            raise ValueError(
+                "Release not found: \n",
+                "Please ensure release as marked as 'latest', rather than pre-release \n",
+                "github api message: \n {} \n ".format(gh_json)
+            )
         latest_release.close()
         return version
 
