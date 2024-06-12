@@ -1,11 +1,12 @@
 from time import sleep_ms, ticks_ms
 import uasyncio as asyncio
 import ujson
-import _atcp
-import _led
-import _mic
-import _mpu
-from ota_updater import OTAUpdater
+import app._atcp as _atcp
+import app._led as _led
+import app._mic as _mic
+import app._mpu as _mpu
+import secrets
+from app.ota_updater import OTAUpdater
 import gc
 
 def limit_map(x, in_min, in_max, out_min, out_max):
@@ -19,7 +20,7 @@ def update():
     except Exception as e:
         print("Something went wrong with updating: ", e)
 
-
+print("UPDATED!")
  
 async def sound():
     print("Starting sound")
@@ -71,7 +72,7 @@ async def waiting_to_connect():
 led = _led.LED()
 mpu = _mpu.MPU()
 mic = _mic.Microphone()
-atcp = _atcp.ATCP(mDNS)
+atcp = _atcp.ATCP(secrets.mDNS)
 loop = asyncio.get_event_loop()
 # connect_event = asyncio.Event()
 
@@ -84,7 +85,7 @@ async def main():
     
     if atcp.wlan.isconnected():
         await atcp.start_server()
-        print("This device is: ", mDNS)
+        print("This device is: ", secrets.mDNS)
 #     loop.run_until_complete(waiting_to_connect())
     
     while True:
