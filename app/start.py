@@ -5,7 +5,7 @@ import app._atcp as _atcp
 import app._led as _led
 import app._mic as _mic
 import app._mpu as _mpu
-import secrets
+import app.secrets
 from app.ota_updater import OTAUpdater
 import gc
 
@@ -15,9 +15,9 @@ def limit_map(x, in_min, in_max, out_min, out_max):
 def update():
     try:
         token='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'
-        updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app' , secrets_file="secrets.py")
+        updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
 #         updater.install_update_if_available_after_boot(atcp.wifi_creds["User"], atcp.wifi_creds["Password"])
-        updater.install_update_if_available()
+        updater.check_for_update_to_install_during_next_reboot()
     except Exception as e:
         print("Something went wrong with updating: ", e)
 
