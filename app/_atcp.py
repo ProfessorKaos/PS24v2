@@ -2,7 +2,7 @@ import network
 import socket
 import uasyncio as asyncio
 from time import sleep, sleep_ms, ticks_ms
-import app.secrets
+import secrets
 
 class ATCP():
     def __init__(self, name):
@@ -98,7 +98,7 @@ class ATCP():
 #             b'ThereIsGodInYou': {"User": "ThereIsGodInYou", "Password": "RightHereRightNow3210!"},
 #         }
 
-        for ssid, creds in app.secrets.wifi_networks.items():
+        for ssid, creds in secrets.wifi_networks.items():
             if ssid in wifi_ssids:
                 self.wifi_creds = creds
                 print(f"Changed wifi_config for: {creds['User']}")

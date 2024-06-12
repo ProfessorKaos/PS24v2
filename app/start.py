@@ -1,4 +1,5 @@
 from time import sleep_ms, ticks_ms
+import machine
 import uasyncio as asyncio
 import ujson
 import app._atcp as _atcp
