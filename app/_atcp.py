@@ -45,17 +45,18 @@ class ATCP():
             if self.data:
                 print("ATCP message: ", self.data.decode().strip())
                 try:
-                    exec(self.data)
+                    print("executing: ", self.data.decode().strip())
+                    exec(self.data.decode().strip())
                 except Exception as e:
                     print("Unable to execute ATCP message because: ", e)
                 self.data = b''
             await asyncio.sleep_ms(200)
     
     
-    async def send_message(self, name, message):
+    async def send_message(self, message):
         try:
             if self.writer:
-                msg = name.encode() + " " + message.encode() + "\n"
+                msg = message.encode() + "\n"
                 self.writer.write(msg)
                 await self.writer.drain()
 #                 print("Message sent:", message)

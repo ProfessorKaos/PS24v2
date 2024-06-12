@@ -14,21 +14,24 @@ def limit_map(x, in_min, in_max, out_min, out_max):
     return int(((max(in_min,min(in_max,x))) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
 
 def update():
+    print("Initiating update")
     try:
         token='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'
         updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
 #         updater.install_update_if_available_after_boot(atcp.wifi_creds["User"], atcp.wifi_creds["Password"])
         hasUpdated = updater.install_update_if_available()
         if hasUpdated:
-            await atcp.send_message("", "Updated and restarting")
+            await atcp.send_message("Updated and restarting")
+            await led.pulse((0,0,255), 2, 3)
             machine.reset()
         else:
-            await atcp.send_message("", "No new updates avaialable")
+            await atcp.send_message("No new updates avaialable")
             del(updater)
             gc.collect()
     except Exception as e:
         print("Something went wrong with updating: ", e)
- 
+
+
 async def sound():
     print("Starting sound")
     color_wheel = 1
@@ -49,7 +52,7 @@ async def touch():
     while True:
         if mpu.det_mov():
 #             udp.sock.sendto(message.encode(), ("192.168.178.47", 65000))
-            await atcp.send_message("Touched", "")
+            await atcp.send_message("touched")
 #             print("message sent")
             await asyncio.sleep(1)
         await asyncio.sleep_ms(50)
@@ -63,18 +66,11 @@ async def mpu_reading():
 #         json = ujson.dumps(readings)
 #         await atcp.send_message("", json)
         
-        await atcp.send_message("gyro", str(gyr))
+        await atcp.send_message(str(gyr))
 #         await atcp.send_message("y", str(xyz[1]))
 #         await atcp.send_message("z", str(xyz[2]))
         await asyncio.sleep_ms(50)
 
-
-async def waiting_to_connect():
-    while not atcp.writer:
-        await asyncio.sleep(0)
-    print("Connected to Client: ", atcp.writer.get_extra_info('peername'))
-    print("Starting MPU Loop")
-    loop.create_task(mpu_reading())
 
 led = _led.LED()
 mpu = _mpu.MPU()
