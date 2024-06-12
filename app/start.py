@@ -20,8 +20,10 @@ def update():
 #         updater.install_update_if_available_after_boot(atcp.wifi_creds["User"], atcp.wifi_creds["Password"])
         hasUpdated = updater.install_update_if_available()
         if hasUpdated:
+            await atcp.send_message("", "Updated and restarting")
             machine.reset()
         else:
+            await atcp.send_message("", "No new updates avaialable")
             del(updater)
             gc.collect()
     except Exception as e:
