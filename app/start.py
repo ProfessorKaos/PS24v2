@@ -15,8 +15,9 @@ def limit_map(x, in_min, in_max, out_min, out_max):
 def update():
     try:
         token='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'
-        updater = OTAUpdater('https://github.com/ProfessorKaos/Primordial-Stars-2024', headers={'Authorization': 'token {}'.format(token)}, main_dir='app' , secrets_file="secrets.py")
-        updater.install_update_if_available_after_boot(atcp.wifi_creds["User"], atcp.wifi_creds["Password"])
+        updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app' , secrets_file="secrets.py")
+#         updater.install_update_if_available_after_boot(atcp.wifi_creds["User"], atcp.wifi_creds["Password"])
+        updater.install_update_if_available()
     except Exception as e:
         print("Something went wrong with updating: ", e)
 
