@@ -25,8 +25,6 @@ def update():
             gc.collect()
     except Exception as e:
         print("Something went wrong with updating: ", e)
-
-print("UPDATED!")
  
 async def sound():
     print("Starting sound")
