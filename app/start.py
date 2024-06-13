@@ -21,8 +21,6 @@ def update():
         updater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
         hasUpdated = updater.install_update_if_available()
         if hasUpdated:
-            led.fill((0,0,255))
-            sleep(1)
             gc.collect()
             led.clear()
             machine.reset()
@@ -53,22 +51,23 @@ async def sound():
 async def touch():
     while True:
         if mpu.det_mov():
+            print("Touched")
             await atcp.send_message("touched")
-            await asyncio.sleep(3)
+            await asyncio.sleep(12)
         await asyncio.sleep_ms(mpu.freq)
 
-async def mpu_reading():
+async def send_mpu():
     while True:
-#         xyz = mpu.map_accel(0,100)
-#         gyr = mpu.map_gyro(0,100)
-#         print(xyz)
         readings = mpu.sma_read_all()
         json = ujson.dumps(readings)
-#         await atcp.send_message(json)
+        await atcp.send_message(json)
+        await asyncio.sleep_ms(mpu.freq)
         
-#         await atcp.send_message(str(gyr))
-#         await atcp.send_message("y", str(xyz[1]))
-#         await atcp.send_message("z", str(xyz[2]))
+        
+async def send_gyro():
+    while True:
+        gyr = mpu.map_gyro(0,100)
+        await atcp.send_message(str(xyz[2]))
         await asyncio.sleep_ms(mpu.freq)
 
 
@@ -80,6 +79,8 @@ loop = asyncio.get_event_loop()
 # connect_event = asyncio.Event()
 
 async def main():
+    
+    
     led.active_effect = loop.create_task(sound())
     
     loop.create_task(atcp.execute_atcp())
