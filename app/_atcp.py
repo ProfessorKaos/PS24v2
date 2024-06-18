@@ -13,15 +13,16 @@ class ATCP():
         self.wlan = network.WLAN(network.STA_IF)
         self.wlan.active(True)
         self.writer = None
-        if self.check_wifis():
-            self.wlan_connect()
-        else:
-            print("Failed to connect to a Knownetwork")
+        self.server = None
+#         if self.check_wifis():
+#             self.wlan_connect()
+#         else:
+#             print("Failed to connect to a Knownetwork")
         self.data = b''
         self.buff = b''
         
     async def start_server(self):
-        server = await asyncio.start_server(self.mess_rec, '0.0.0.0', 12345)
+        self.server = await asyncio.start_server(self.mess_rec, '0.0.0.0', 12345)
 #         async for client in server:
 #             await client
         print("Server started")
@@ -67,11 +68,10 @@ class ATCP():
     
     def wlan_connect(self):
         try:
-            self.wlan.connect(self.wifi_creds["User"], self.wifi_creds["Password"])
+            if not self.wlan.isconnected():
+                self.wlan.connect(self.wifi_creds["User"], self.wifi_creds["Password"])
             
-            timer = ticks_ms() + 5000
-
-            while not self.wlan.isconnected() and ticks_ms() < timer:
+            while not self.wlan.isconnected():
                 pass
 
             if self.wlan.isconnected():
@@ -91,14 +91,6 @@ class ATCP():
         
         scan_results = self.wlan.scan()
         wifi_ssids = {ap[0]: ap for ap in scan_results}
-
-#         wifi_networks = {
-#             
-#             b'donotuse': {"User": "donotuse", "Password": "ireallymeanit"},
-#             b'Prof-Kaos': {"User": "Prof-Kaos", "Password": "joinme!haha"},
-#             b'micho-leo': {"User": "micho-leo", "Password": "thedreamliveson"},
-#             b'ThereIsGodInYou': {"User": "ThereIsGodInYou", "Password": "RightHereRightNow3210!"},
-#         }
 
         for ssid, creds in secrets.wifi_networks.items():
             if ssid in wifi_ssids:

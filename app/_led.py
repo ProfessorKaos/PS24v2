@@ -84,12 +84,15 @@ class LED:
             r, g, b = x, 0, c
         elif 300 <= hue < 360:
             r, g, b = c, 0, x
-        r = (r + m) * 255 // 1024
-        g = (g + m) * 255 // 1024
-        b = (b + m) * 255 // 1024
+            
+        self.red = (r + m) * 255 // 1024
+        self.green = (g + m) * 255 // 1024
+        self.blue = (b + m) * 255 // 1024
         
-        self.fill((r,g,b))
+#         self.fill((r,g,b))
+#         self.fill((self.red,self.green,self.blue))
 #         return r, g, b
+#         return (r, g, b)
 
 
     def rgb_to_hsl(self, rgb):

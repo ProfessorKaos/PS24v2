@@ -45,8 +45,10 @@ async def sound():
 #         print("lighting: ", lighting)
 #         print("sound took : ", ticks_diff(ticks_us(), start_time), "us")
         led.hsl(color_wheel, 100, lighting)
-        await asyncio.sleep_ms(mic.freq) 
+        led.fill((led.red, led.green, led.blue))
 
+        await asyncio.sleep_ms(mic.freq)
+        
 
 async def touch():
     while True:
@@ -55,6 +57,11 @@ async def touch():
             await atcp.send_message("touched")
             await asyncio.sleep(12)
         await asyncio.sleep_ms(mpu.freq)
+
+async def send_led():
+    while True:
+        await atcp.send_message(f'R {led.red}\nG {led.green}\nB {led.blue}')
+        await asyncio.sleep_ms(200)
 
 async def send_mpu():
     while True:
@@ -80,20 +87,19 @@ loop = asyncio.get_event_loop()
 
 async def main():
     
-    
     led.active_effect = loop.create_task(sound())
     
     loop.create_task(atcp.execute_atcp())
     loop.create_task(touch())
-#     loop.create_task(mpu_reading())
-    
-    if atcp.wlan.isconnected():
-        await atcp.start_server()
-        print("This device is: ", secrets.mDNS)
-#     loop.run_until_complete(waiting_to_connect())
-    
+    loop.create_task(send_led())
+
     while True:
-        await asyncio.sleep(20)
+        if not atcp.wlan.isconnected():
+            if atcp.check_wifis():
+                atcp.wlan_connect()
+        if not atcp.server:
+            await atcp.start_server()
+        await asyncio.sleep(60)
         gc.collect()
 #         print(mpu.sma)
 
