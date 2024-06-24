@@ -46,7 +46,7 @@ async def sound():
 #         print("sound took : ", ticks_diff(ticks_us(), start_time), "us")
         led.hsl(color_wheel, 100, lighting)
         led.fill((led.red, led.green, led.blue))
-
+    
         await asyncio.sleep_ms(mic.freq)
         
 
@@ -61,7 +61,7 @@ async def touch():
 async def send_led():
     while True:
         await atcp.send_message(f'R {led.red}\nG {led.green}\nB {led.blue}')
-        await asyncio.sleep_ms(200)
+        await asyncio.sleep_ms(50)
 
 async def send_mpu():
     while True:

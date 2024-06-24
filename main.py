@@ -21,6 +21,7 @@ def connectToWifiAndUpdate():
     else:
         del(otaUpdater)
         gc.collect()
+        
 
 def startApp():
     import app.start
@@ -29,4 +30,11 @@ def startApp():
 # check_updated()
 
 # connectToWifiAndUpdate()
-startApp()
+
+try: 
+    startApp()
+    
+except Exception as e:
+    print("Unable to start app, trying to download updated version")
+    connectToWifiAndUpdate()
+    machine.reset()
