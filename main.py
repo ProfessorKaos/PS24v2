@@ -13,7 +13,7 @@ def connectToWifiAndUpdate():
     atcp = _atcp.ATCP(secrets.mDNS)
     
 
-    token='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'
+    token='INSERT GH TOKEN HERE'
     otaUpdater = OTAUpdater('https://github.com/ProfessorKaos/PS24v2', headers={'Authorization': 'token {}'.format(token)}, main_dir='app')
     hasUpdated = otaUpdater.install_update_if_available()
     if hasUpdated:
